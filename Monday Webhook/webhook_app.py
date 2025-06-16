@@ -14,17 +14,16 @@ HEADERS = {
 def webhook():
     if request.method == "GET":
         challenge = request.args.get("challenge")
+        print("🔁 Challenge received:", challenge)
         return jsonify({"challenge": challenge}), 200
 
-    # === POST handler ===
+    # === POST event from Monday ===
     data = request.get_json()
     print("✅ Webhook received:", data)
 
-    # Return 200 OK immediately to avoid timeout
     response = jsonify({"status": "received"})
     response.status_code = 200
 
-    # Do all processing here
     try:
         item_id = data["event"]["pulseId"]
         board_id = data["event"]["boardId"]
@@ -48,7 +47,7 @@ def webhook():
         print("Create item response:", res.text)
 
     except Exception as e:
-        print("Error handling webhook:", e)
+        print("❌ Error handling POST:", e)
 
     return response
 

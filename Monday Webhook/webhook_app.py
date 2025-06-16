@@ -15,7 +15,7 @@ def webhook():
     if request.method == "GET":
         challenge = request.args.get("challenge")
         print("🔁 Challenge received:", challenge)
-        return jsonify({"challenge": challenge}), 200
+        return jsonify({"challenge": challenge}), 200   # ✅ Early return here
 
     # === POST event from Monday ===
     data = request.get_json()
@@ -50,6 +50,7 @@ def webhook():
         print("❌ Error handling POST:", e)
 
     return response
+
 
 
 

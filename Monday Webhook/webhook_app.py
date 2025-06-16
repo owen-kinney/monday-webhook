@@ -16,8 +16,7 @@ def webhook():
         challenge = request.args.get("challenge")
         return jsonify({"challenge": challenge}), 200
 
-@app.route('/webhook', methods=['POST'])
-def webhook():
+    # === POST handler ===
     data = request.get_json()
     print("✅ Webhook received:", data)
 
@@ -25,13 +24,13 @@ def webhook():
     response = jsonify({"status": "received"})
     response.status_code = 200
 
-    # Optionally: Do all processing later
+    # Do all processing here
     try:
-        item_id = data['event']['pulseId']
-        board_id = data['event']['boardId']
-        trigger_col = data['event']['columnId']
+        item_id = data["event"]["pulseId"]
+        board_id = data["event"]["boardId"]
+        trigger_col = data["event"]["columnId"]
 
-        print(f"🔄 Column {trigger_col} changed on item {item_id} in board {board_id}")
+        print(f"📌 Column {trigger_col} changed on item {item_id} in board {board_id}")
 
         mutation = f'''
         mutation {{
@@ -40,13 +39,19 @@ def webhook():
             }}
         }}
         '''
-        res = requests.post("https://api.monday.com/v2", headers=HEADERS, json={"query": mutation})
-        print("🆕 Create item response:", res.text)
+
+        res = requests.post(
+            url="https://api.monday.com/v2",
+            headers=HEADERS,
+            json={"query": mutation}
+        )
+        print("Create item response:", res.text)
 
     except Exception as e:
-        print("⚠️ Error handling webhook:", e)
+        print("Error handling webhook:", e)
 
     return response
+
 
 
 @app.route('/', methods=['GET'])

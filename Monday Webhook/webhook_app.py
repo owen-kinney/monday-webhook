@@ -10,6 +10,12 @@ HEADERS = {
     "Content-Type": "application/json"
 }
 
+@app.route("/webhook", methods=["GET", "POST"])
+def webhook():
+    if request.method == "GET":
+        challenge = request.args.get("challenge")
+        return jsonify({"challenge": challenge}), 200
+
 @app.route('/webhook', methods=['POST'])
 def webhook():
     data = request.get_json()

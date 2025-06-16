@@ -46,3 +46,8 @@ def webhook():
 @app.route('/', methods=['GET'])
 def home():
     return "Webhook listener is live", 200
+
+if __name__ == '__main__':
+    import os
+    port = int(os.environ.get("PORT", 5000))  # fallback to 5000 for local dev
+    app.run(host='0.0.0.0', port=port)
